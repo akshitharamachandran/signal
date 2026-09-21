@@ -1,1 +1,1693 @@
-<!doctype html><meta name=robots content=noindex><title>Signal Board</title><p>First run pending.
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="referrer" content="no-referrer">
+<title>Signal Board</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E%F0%9F%93%8B%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,600&family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#FBF8F7; --surface:#FFFFFF; --surface-2:#F4EFED; --surface-3:#EBE3E1;
+  --ink:#1A1719; --ink-2:#585052; --ink-3:#8C8285;
+  --line:#E5DDDB; --line-2:#D4C9C6;
+  --berry:#A6203C; --berry-ink:#A6203C; --berry-soft:#F7E4E8; --on-berry:#FFF7F8;
+  --now:#A8391A; --soon:#8A6410; --open:#2C6A50; --gold:#9E7318;
+  --display:"Bodoni Moda",Georgia,serif;
+  --body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light dark;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#16171A; --surface:#1E2024; --surface-2:#25282D; --surface-3:#2E3238;
+  --ink:#F2EEEC; --ink-2:#AEA7A6; --ink-3:#7C7578;
+  --line:#31353B; --line-2:#3E434A;
+  --berry:#E86B83; --berry-ink:#F08D9F; --berry-soft:#332026; --on-berry:#1A1013;
+  --now:#E8825C; --soon:#D9AE4B; --open:#68BD97; --gold:#D6AC51;
+}}
+:root[data-theme="dark"]{
+  --bg:#16171A; --surface:#1E2024; --surface-2:#25282D; --surface-3:#2E3238;
+  --ink:#F2EEEC; --ink-2:#AEA7A6; --ink-3:#7C7578;
+  --line:#31353B; --line-2:#3E434A;
+  --berry:#E86B83; --berry-ink:#F08D9F; --berry-soft:#332026; --on-berry:#1A1013;
+  --now:#E8825C; --soon:#D9AE4B; --open:#68BD97; --gold:#D6AC51;
+}
+*{box-sizing:border-box}
+img{max-width:100%}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding-left:20px;padding-right:20px;padding-bottom:80px}
+a{color:var(--berry-ink)}
+:focus-visible{outline:2px solid var(--berry);outline-offset:2px;border-radius:3px}
+h1,h2{margin:0;text-wrap:balance}
+
+.mast{padding-block:44px 20px;border-bottom:2px solid var(--ink);display:flex;flex-wrap:wrap;gap:22px;align-items:flex-end;justify-content:space-between}
+.mast h1{font-family:var(--display);font-size:clamp(30px,5.2vw,46px);font-weight:600;letter-spacing:-.02em;line-height:1.02}
+.mast .sub{color:var(--ink-3);font-size:14.5px;max-width:54ch;margin:10px 0 0}
+.stamp{font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);display:flex;flex-direction:column;gap:4px;text-align:right}
+.stamp b{color:var(--ink);font-weight:500}
+
+.tally{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:4px;background:var(--surface);margin-top:22px;overflow:hidden}
+.tally .cell{flex:1 1 130px;padding:12px 15px;border-right:1px solid var(--line)}
+.tally .cell:last-child{border-right:0}
+.tally .n{font-family:var(--mono);font-size:21px;font-weight:500;font-variant-numeric:tabular-nums;line-height:1.1}
+.tally .n.due{color:var(--now)}
+.tally .k{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);margin-top:3px}
+
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 93%,transparent);backdrop-filter:blur(12px);padding-block:12px;border-bottom:1px solid var(--line);margin-top:22px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;padding:6px 11px;border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);border-radius:99px;cursor:pointer}
+.chip:hover{border-color:var(--ink-3)}
+.chip[aria-pressed="true"]{background:var(--berry);color:var(--on-berry);border-color:var(--berry)}
+.search{flex:1 1 180px;min-width:140px;font:inherit;font-size:13.5px;padding:7px 12px;border:1px solid var(--line-2);border-radius:99px;background:var(--surface);color:var(--ink)}
+.togg{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap}
+
+section{margin-top:38px}
+.sec-head{display:flex;align-items:baseline;gap:11px;border-bottom:1px solid var(--ink);padding-bottom:6px}
+.sec-head h2{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.sec-head .ct{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.sec-note{color:var(--ink-3);font-size:13px;margin:8px 0 0}
+
+.row{display:grid;grid-template-columns:24px 1fr;gap:11px;padding:14px 12px;border-bottom:1px solid var(--line);border-left:3px solid transparent;align-items:start}
+.row:hover{background:var(--surface)}
+.row.s-now{border-left-color:var(--now)}
+.row.s-soon{border-left-color:var(--soon)}
+.row.s-past{opacity:.48}
+.row.done{opacity:.4}
+.row.done .title{text-decoration:line-through}
+.tick{appearance:none;width:16px;height:16px;margin-top:3px;border:1.5px solid var(--line-2);border-radius:3px;background:var(--surface);cursor:pointer;position:relative;flex:0 0 auto}
+.tick:checked{background:var(--ink);border-color:var(--ink)}
+.tick:checked::after{content:"";position:absolute;left:4.5px;top:1px;width:4px;height:8px;border:solid var(--bg);border-width:0 2px 2px 0;transform:rotate(43deg)}
+.title{font-size:15.5px;font-weight:600;line-height:1.3;letter-spacing:-.005em}
+.title .org{color:var(--ink-3);font-weight:500}
+.meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;align-items:center}
+.tag{font-family:var(--mono);font-size:10px;letter-spacing:.04em;padding:2.5px 7px;border-radius:3px;background:var(--surface-2);color:var(--ink-2)}
+.tag.when{background:var(--berry-soft);color:var(--berry-ink);font-weight:500}
+.tag.due{background:transparent;border:1px solid var(--now);color:var(--now);font-weight:500;text-transform:uppercase}
+.tag.src{background:transparent;border:1px dashed var(--line-2);color:var(--ink-3)}
+.tag.flyer{background:transparent;border:1px solid var(--gold);color:var(--gold)}
+.detail{font-size:14px;color:var(--ink-3);margin-top:7px}
+.act{font-size:14px;color:var(--ink-2);margin-top:7px}
+.act b{font-weight:600;color:var(--ink)}
+.links{display:flex;flex-wrap:wrap;gap:12px;margin-top:7px}
+.links a{font-family:var(--mono);font-size:11px;letter-spacing:.03em;text-decoration:none;border-bottom:1px solid var(--line-2);padding-bottom:1px;word-break:break-word}
+.links a:hover{border-bottom-color:var(--berry)}
+.links a::before{content:"\2192\00a0"}
+.empty{padding:24px 4px;color:var(--ink-3);font-size:14px}
+
+footer{margin-top:48px;padding-top:16px;border-top:1px solid var(--line);color:var(--ink-3);font-size:12.5px}
+footer p{margin:0 0 8px;max-width:78ch}
+footer b{color:var(--ink-2)}
+@media(max-width:560px){
+  .wrap{padding-left:16px;padding-right:16px}
+  .tally .cell{flex-basis:50%;border-bottom:1px solid var(--line)}
+  .stamp{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div>
+      <h1>Signal Board</h1>
+      <p class="sub">Every club invite, recruiting event and deadline pulled out of your MIT WhatsApp groups, with the thing you actually have to do sitting next to it.</p>
+    </div>
+    <div class="stamp" id="stamp"></div>
+  </header>
+
+  <div class="tally" id="tally"></div>
+
+  <div class="controls">
+    <div class="chips" id="chips" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    <input class="search" id="q" type="search" placeholder="Search club, company, room&hellip;" aria-label="Search">
+    <label class="togg" for="hideDone"><input type="checkbox" id="hideDone"> Hide done</label>
+  </div>
+
+  <div id="board"></div>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+var META = {"today": [2026, 8, 20], "read": "20 Sep 2026", "groups": 19, "messages": 1520, "flyers": 0, "back": "31 Aug", "footer": "<p><b>Where this came from.</b> Every text message posted between 31 August and 20 September across 19 MIT WhatsApp groups: Sloan 27s + 28s, Water Cooler, General, MBA/LGO/MSMS, SABC, Sloan ’27–28 Consulting Community, Sloan ETA Club, MIT Sloan AI &amp; ML Club, Founders &amp; Builders, Free Food 27/28, Caribbean, Caribs 27 + 28, Caribbean Plovers, Carib Plovers Working Team, Indians 27-28, Southeast Asians 27 + 28, Significant Others of Sloan, Sloan Tanzania Trek Interest, and MIT Sloan #ColombiaTrek 2027. Read in full, not keyword-filtered.</p><p><b>What is missing this week.</b> No flyers were read, so any announcement that existed only inside an image — several room numbers and a few registration links were posted that way — is not here. The <b>MIT Sloan CDO</b> group does not sync to this Mac and was not readable, so some employer events and Career Central postings will be absent. Confirm times and rooms against the original post before you rely on them.</p><p><b>Deliberately left off.</b> WhatsApp group invite links and classmates’ personal email addresses and phone numbers are stripped from this page — where joining a group chat is the action, the item says which chat the link is in. Official registration links are kept.</p>"};
+var ITEMS = [
+ {
+  "cat": "deadline",
+  "title": "AAA x SABC Fall Retreat — tickets",
+  "org": "AAA + SABC",
+  "d": [
+   2026,
+   8,
+   21
+  ],
+  "when": "Retreat 9–11 Oct · The Ecology School, Maine",
+  "detail": "Kayaking, volleyball, campfires, s’mores, food and drinks. $350 total: $250 deposit on SloanGroups plus $100 by Venmo. After the SloanGroups ticket you must also complete the Google form or your registration is incomplete. Limited spots, and no SOs this year.",
+  "act": "<b>Tickets drop Monday 21 Sep at noon.</b> Last year’s comparable drops sold out in 20 minutes — set an alarm.",
+  "src": "SABC",
+  "flyer": false,
+  "links": [
+   [
+    "SloanGroups ticket",
+    "https://cglink.me/2eJ/r1936793"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "Plug and Play University Program",
+  "org": "Plug and Play (via VC/PE Club)",
+  "d": [
+   2026,
+   8,
+   21
+  ],
+  "when": "Programme runs 6 Oct 2026 – 20 Apr 2027 · remote",
+  "detail": "Seven-month VC programme: live pitch sessions, real deal flow, a bi-weekly lecture series, and group work with peers worldwide. Costs about 45–60 min/week of async diligence on 30–35 startups, plus a mandatory hour-long call every other week. Winter break 16 Dec – 18 Jan.",
+  "act": "Apply by <b>Monday 21 Sep, 8:00 PM ET</b>, using your @mit.edu address.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Application",
+    "https://docs.google.com/forms/d/e/1FAIpQLSfyWKxDoa4AWVbvLQ161wDTXJlMmcFGQadE-sdhzjU-jZzzTw/viewform"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "Hanwha PLUS NY 2026",
+  "org": "Hanwha Finance",
+  "d": [
+   2026,
+   8,
+   21
+  ],
+  "when": "Fri 13 Nov · The Glasshouse, NYC",
+  "detail": "Mainstage sessions, mentoring, a career fair and a K-pop networking party. Two pass types: All-Day (conference plus party) or Party only.",
+  "act": "Apply by <b>21 Sep, 11:59 PM KST</b> — that is the evening of <b>20 Sep</b> in Boston, so treat it as already due.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Apply",
+    "https://www.hanwhafinancetalent.com/plusny"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "Grad Rat Ring Committee",
+  "org": "Graduate Ring Committee",
+  "d": [
+   2026,
+   8,
+   23
+  ],
+  "when": "Minimum 2-year commitment",
+  "detail": "Low-lift committee shaping the ring every MIT grad student wears, and a rare excuse to work with PhDs outside the Sloan bubble. Committee members tend to walk away with something shiny. The deadline moved from 18 Sep to 23 Sep.",
+  "act": "Apply by <b>23 Sep</b>. Separately: ring sizing with Herff Jones in the Slafe, and an Orientation Party Fri 25 Sep, 5–7 PM in Lobby 13 with free food and a chance to win a ring.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Committee application",
+    "https://docs.google.com/forms/d/1YYyCdLwwZnEGNR_o-bSxPNPJXt0Bqzx_n1vawIEVWog/viewform"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "MIT $100K organizing team",
+  "org": "MIT $100K",
+  "d": [
+   2026,
+   8,
+   24
+  ],
+  "when": "Info session Tue 22 Sep · E62-221",
+  "detail": "One of the largest student-run pitch competitions in the world — 160+ companies launched, $1.3B raised, 8+ unicorns. Leadership open across Marketing, Operations, Sponsorships, Judging, Competitor Experience and Finance. No experience needed. Follow-up calls 25–26 Sep, announcements the evening of 27 Sep, first meeting Mon 28 Sep with food.",
+  "act": "Apply by <b>24 Sep</b>. Go to the info session on the 22nd first if you are undecided.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Application",
+    "https://forms.gle/FyrYim3kVigvxpgo9"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "PM Club VP applications",
+  "org": "Product Management Club",
+  "d": [
+   2026,
+   8,
+   25
+  ],
+  "when": "Open to 1Ys",
+  "detail": "Open VP spots helping run PM Club this year. Applications went live alongside the kick-off announcement, so the 21 Sep kick-off is the natural place to decide.",
+  "act": "Apply by <b>25 Sep, 11:59 PM</b>.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "VP application",
+    "https://forms.gle/Rwy6zrbU3rM3PyjV9"
+   ],
+   [
+    "Kick-off RSVP",
+    "https://cglink.me/2eJ/r1936611"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "Global Startup Workshop 2027 leadership",
+  "org": "MIT GSW",
+  "d": [
+   2026,
+   8,
+   25
+  ],
+  "when": "Conference week of 22 Mar 2027 · host city TBA — free trip abroad",
+  "detail": "MIT’s student-run international entrepreneurship conference, running since 1998 across 24 countries and drawing 1,000+ attendees. Recruiting 3 Managing Directors (strategy, a 15-person team, a six-figure budget, direct liaison with the international host partner) plus team members across Marketing, Operations, Competitions and Content. One application covers all roles.",
+  "act": "Apply by <b>Friday 25 Sep, 11:59 PM</b>.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Application",
+    "https://forms.gle/6U5pCCGM6T7JxtBS6"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "TNT Accelerator — fall cohort",
+  "org": "TNT",
+  "d": [
+   2026,
+   8,
+   27
+  ],
+  "when": "Demo Day in SF",
+  "detail": "Open to teams from MIT and Harvard. This is the first cohort where TNT invests in every team accepted. Teams are paired with an experienced founder who works with them weekly, plus partner credits and resources.",
+  "act": "Applications close <b>27 Sep</b>.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Apply",
+    "https://www.tnt.so/apply"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "Forté MBA Virtual Leadership Conference",
+  "org": "Forté · sponsored by CDO",
+  "d": [
+   2026,
+   9,
+   7
+  ],
+  "when": "Virtual",
+  "detail": "Employer connections, career exploration and leadership programming built for MBA students. Free for MIT Sloan students — CDO covers the fee in full with the discount code SLOAN26 at registration.",
+  "act": "Register by <b>7 Oct, 11:59 PM ET</b> using code <b>SLOAN26</b>.",
+  "src": "MBA/LGO/MSMS",
+  "flyer": false,
+  "links": [
+   [
+    "Registration",
+    "https://www.fortefoundation.org/mba/events/virtual-mba-conference-registration/"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "QLab — defence and dual-use",
+  "org": "Belfer Center",
+  "d": null,
+  "when": "Applications open Oct 2026",
+  "detail": "For anyone building in the defence or dual-use space. The form right now only puts you on the list for when applications open in October.",
+  "act": "Fill the interest form now so you hear when October applications open.",
+  "src": "Founders & Builders",
+  "flyer": false,
+  "links": [
+   [
+    "Interest form",
+    "https://forms.gle/xnrD74ieQCefZpkX9"
+   ],
+   [
+    "About QLab",
+    "https://www.belfercenter.org/programs/intelligence-project/qlab"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "SABC VP applications",
+  "org": "South Asian Business Club",
+  "d": null,
+  "when": "Open now · deliberately light commitment",
+  "detail": "Described by the current leadership as fluid and shape-your-own-adventure — organise whatever you want to see in the community. Questions go to the SABC Co-Presidents or SVPs.",
+  "act": "Apply through the SABC form; no closing date was posted, so sooner is safer.",
+  "src": "SABC",
+  "flyer": false,
+  "links": [
+   [
+    "Application",
+    "https://docs.google.com/forms/d/e/1FAIpQLSdDRnuK4Fq4gpS5cmiJwLW7t2JZl4xzeeTlBAc5LvNFPil1uA/viewform"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "ETA Club officer applications",
+  "org": "MIT Sloan ETA Club",
+  "d": null,
+  "when": "Open now",
+  "detail": "Join the leadership team shaping the club’s events, its annual February conference, and the broader ETA community.",
+  "act": "Fill in the short application; no deadline was given.",
+  "src": "Sloan ETA Club",
+  "flyer": false,
+  "links": [
+   [
+    "Application",
+    "https://docs.google.com/forms/d/e/1FAIpQLSeuw7LfcSD-3dOzSvGD3FTrj_TNkIvrLf1ghC8nUra1uUUzuw/viewform"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "Sloan Senate — applications",
+  "org": "Sloan Senate",
+  "d": [
+   2026,
+   8,
+   20
+  ],
+  "when": "Elections next week · 2 senators per ocean",
+  "detail": "Represent your ocean. Pitches were due Sunday night and elections follow the week after. At least one Carib has already declared. Note the Baltic 27s already have their two.",
+  "act": "<b>Closed Sunday 20 Sep, 11:59 PM.</b> Elections run this coming week.",
+  "src": "Sloan 27s + 28s · Caribbean",
+  "flyer": false,
+  "links": [
+   [
+    "Application",
+    "https://docs.google.com/forms/d/e/1FAIpQLSetWu_OFoMdvZ5UU0pLhuqy78EWJC3VoC6DHbgM3gF5TZwkog/viewform"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "Sports Analytics Conference organising team",
+  "org": "MIT Sloan SSAC",
+  "d": [
+   2026,
+   8,
+   20
+  ],
+  "when": "Conference draws 2,500+ people",
+  "detail": "The largest student-run conference in the world, with representation from the WNBA, MLB, MLS, NBA, NFL, NHL, NWSL, EPL and IPL, 300+ sports organisations and students from 150+ institutions. All backgrounds welcome — sports experience not required.",
+  "act": "<b>Closed Sunday 20 Sep, 11:59 PM ET.</b>",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Application",
+    "https://forms.gle/1uQSB9quZ8Qtdp7HA"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "CBC nominations and elections",
+  "org": "Community Building Chairs",
+  "d": [
+   2026,
+   8,
+   27
+  ],
+  "when": "Nominations closed 18 Sep · voting 21–27 Sep",
+  "detail": "Two CBCs per ocean, planning BBQs, retreats, karaoke and casual hangs, and helping others run their own ideas. Described by a current CBC as real leadership reps and high-visibility across oceans. Your answer to the final form question became your candidate statement.",
+  "act": "Nominations are closed. <b>Voting opens Monday 21 Sep and runs to Sunday 27 Sep</b> — vote for your ocean.",
+  "src": "Sloan 27s + 28s · Caribs 27 + 28",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "deadline",
+  "title": "Camp Sloan lottery",
+  "org": "Student Life",
+  "d": [
+   2026,
+   8,
+   16
+  ],
+  "when": "Trip 2–4 Oct · White Mountains, NH",
+  "detail": "About 90 Sloanies, overnight hiking and community bonding, with the option to summit Mount Washington. $199 covers round-trip transport, a Joe Dodge Lodge bunk room and food. No SOs or family. Allocated by lottery across all Sloan programmes and years.",
+  "act": "<b>Lottery closed 16 Sep.</b> Results were shared Friday 18 Sep — check whether you got a spot.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "deadline",
+  "title": "Deloitte — Senior Consultant, Enterprise Strategy",
+  "org": "Deloitte",
+  "d": [
+   2026,
+   8,
+   18
+  ],
+  "when": "Interviews 2 Oct · Deloitte Boston office",
+  "detail": "Full-time MBA role helping executives navigate AI-driven disruption. Resume and cover letter both required. Deloitte will also be at MBA Networking Night.",
+  "act": "<b>Closed 18 Sep, 11:59 PM ET.</b> Process questions go to the Deloitte recruiting contact named in the MBA/LGO/MSMS post.",
+  "src": "MBA/LGO/MSMS",
+  "flyer": false,
+  "links": [
+   [
+    "Career Central posting",
+    "https://cdo-mit.12twenty.com/job-postings/35006705596982"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "Admissions Peers Program",
+  "org": "MIT Sloan Admissions",
+  "d": [
+   2026,
+   8,
+   18
+  ],
+  "when": "~2–3 hrs/week · paid",
+  "detail": "New this year: a paid student ambassador role supporting prospective and admitted students through class visits, AdMIT Days, coffee chats and prospect emails. $500 TechCash per semester, or $750 for Leads. You may be featured on the Admissions website.",
+  "act": "<b>Closed Friday 18 Sep.</b> Worth watching for next cycle.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Details",
+    "https://applymitsloan.mit.edu/register/AdmissionsPeers26.27"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "Water, Food & Agriculture Prize leadership",
+  "org": "MIT WFA",
+  "d": [
+   2026,
+   8,
+   18
+  ],
+  "when": "Pitch competition launches in the spring",
+  "detail": "Leadership positions running the annual pitch competition: learn the competition planning process and work with organisations across the water, food and ag startup ecosystem.",
+  "act": "<b>Closed EOD 18 Sep.</b> Questions go to the two MIT organisers named in the Sloan 27s + 28s post.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Application",
+    "https://docs.google.com/forms/d/e/1FAIpQLSdWg3fBTT1rvPvaWFTVYWC25n3brpOQJsml7O2qHFJmKHac3g/viewform"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "Dorm Room Fund — student investment partner",
+  "org": "Dorm Room Fund",
+  "d": [
+   2026,
+   9,
+   1
+  ],
+  "when": "East Coast closed 17 Sep · West Coast 1 Oct",
+  "detail": "The original student venture fund, founded by First Round Capital. Student partners write real checks and work with real founders. Portfolio includes Cursor, Dandy, Shield AI, Hightouch and Vulcan Elements; alumni are now partners at Sequoia, a16z, Bessemer and Accel. Reviewed on a rolling basis.",
+  "act": "East Coast round <b>closed 17 Sep</b>. <b>West Coast closes 1 Oct</b> if that applies to you.",
+  "src": "Sloan 27s + 28s · Founders & Builders",
+  "flyer": false,
+  "links": [
+   [
+    "Join the iTeam",
+    "https://dormroomfund.com/join"
+   ],
+   [
+    "Founders apply",
+    "https://www.dormroomfund.com/apply"
+   ]
+  ]
+ },
+ {
+  "cat": "deadline",
+  "title": "MIT AI Conference — startup pitch",
+  "org": "MIT AI Conference",
+  "d": [
+   2026,
+   8,
+   20
+  ],
+  "when": "Conference 17 Oct 2026 · Mountain View",
+  "detail": "For founders building AI startups in any domain — healthcare, robotics, energy, computer science. The conference features Replit, Microsoft, General Catalyst, Greylock, OpenAI, Adobe, Applied Intuition, Liquid AI, Spotify, Oura, Grammarly, MIT Media Lab, E14 Fund and Ridge Ventures. AI Club is separately trying to get tickets for Sloanies.",
+  "act": "<b>Pitch applications closed 20 Sep.</b> Watch the AI &amp; ML Club chat for the ticket allocation.",
+  "src": "MIT Sloan AI & ML Club",
+  "flyer": false,
+  "links": [
+   [
+    "Details",
+    "https://luma.com/gthc6gs1"
+   ]
+  ]
+ },
+ {
+  "cat": "recruiting",
+  "title": "FBI Special Advisor Program",
+  "org": "FBI",
+  "d": [
+   2026,
+   8,
+   21
+  ],
+  "when": "Mon 21 Sep · coffee chats 10:00–11:30 AM, presentation 11:45 AM–12:30 PM",
+  "detail": "MBAs work as internal consultants on high-impact projects across one of the world’s largest organisations. <b>Special Advisors must be US citizens and able to obtain a Top Secret security clearance</b> — check that before you invest time.",
+  "act": "Register for either session in Career Central.",
+  "src": "MBA/LGO/MSMS",
+  "flyer": false,
+  "links": [
+   [
+    "Coffee chats",
+    "https://cdo-mit.12twenty.com/events/30006101384909"
+   ],
+   [
+    "Lunch presentation",
+    "https://cdo-mit.12twenty.com/events/30006101384908"
+   ]
+  ]
+ },
+ {
+  "cat": "recruiting",
+  "title": "TikTok NEXT @ MIT — campus kickoff",
+  "org": "TikTok",
+  "d": [
+   2026,
+   8,
+   21
+  ],
+  "when": "Mon 21 Sep · 6:00 PM · Building 6-120",
+  "detail": "Open to the classes of 2027 and 2028. Teams hiring: Engineering, TikTok Shop, Global Monetization Product &amp; Technology, Corporate Functions and Data. Senior leaders present, then networking.",
+  "act": "<b>The interest form closed 16 Sep.</b> Selected students get a confirmation email two days before — check your inbox.",
+  "src": "MIT Sloan AI & ML Club",
+  "flyer": false,
+  "links": [
+   [
+    "Interest form",
+    "https://bytedance.us.larkoffice.com/share/base/form/shrus3MFgzspK94hCX6ah4cUQxb"
+   ]
+  ]
+ },
+ {
+  "cat": "recruiting",
+  "title": "DESRI recruiting event",
+  "org": "DE Shaw Renewable Investments",
+  "d": [
+   2026,
+   8,
+   23
+  ],
+  "when": "Tue 23 Sep · 5–7 PM · The Hourly Oyster House",
+  "detail": "For anyone interested in renewable energy. Hiring for both internships and full-time roles. No sign-up link was posted — someone asked and got no answer, so turning up appears to be the route.",
+  "act": "Show up, or ask in Sloan 27s + 28s whether registration has since appeared.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "recruiting",
+  "title": "MCC mixer with second-years",
+  "org": "Management Consulting Club",
+  "d": [
+   2026,
+   8,
+   23
+  ],
+  "when": "Wed 23 Sep",
+  "detail": "A deliberately low-key chance to meet the 2Ys and the people you will keep seeing at recruiting events all year. Sloan would not approve alcohol reimbursement, so they ordered plenty of food instead. Sponsored students explicitly welcome.",
+  "act": "Register on SloanGroups.",
+  "src": "Sloan ’27-28 Consulting Community",
+  "flyer": false,
+  "links": [
+   [
+    "Register",
+    "https://cglink.me/2eJ/r1936746"
+   ]
+  ]
+ },
+ {
+  "cat": "recruiting",
+  "title": "VC summer internship — 2Y AMA panel",
+  "org": "MIT Sloan VC Club",
+  "d": [
+   2026,
+   9,
+   6
+  ],
+  "when": "Tue 6 Oct · 11:30 AM–1:00 PM",
+  "detail": "Second-years who went through VC recruiting last year on networking, interviews and what they wish they had known earlier. Open to anyone interested in VC.",
+  "act": "Sign up on SloanGroups and bring questions.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Sign up",
+    "https://cglink.me/2eJ/r1936771"
+   ]
+  ]
+ },
+ {
+  "cat": "recruiting",
+  "title": "American Express — Boston internship event",
+  "org": "American Express",
+  "d": [
+   2026,
+   9,
+   6
+  ],
+  "when": "Tue 6 Oct · 2:00–5:00 PM · Boston · invitation only",
+  "detail": "Internship opportunities across business and technology teams, with information on full-time roles too. Leaders and recruiters present; food provided. Space limited and attendance is by selection.",
+  "act": "<b>Applications closed 13 Sep.</b> Selected students hear about a week before the event.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Posting",
+    "https://egug.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/26012732/"
+   ]
+  ]
+ },
+ {
+  "cat": "recruiting",
+  "title": "IBM Corporate Strategy — 2027 full-time",
+  "org": "IBM",
+  "d": null,
+  "when": "Virtual event · 2Ys with permanent US work authorisation only",
+  "detail": "IBM’s internal strategy consulting team, working across AI, data, hybrid cloud and quantum computing. Note the sequencing: apply to the role <i>before</i> attending the event.",
+  "act": "Apply in Career Central first, then register for the virtual event.",
+  "src": "MBA/LGO/MSMS",
+  "flyer": false,
+  "links": [
+   [
+    "Role posting",
+    "https://cdo-mit.12twenty.com/job-postings/35006705606629"
+   ],
+   [
+    "Event registration",
+    "https://cdo-mit.12twenty.com/events/30006101386757"
+   ]
+  ]
+ },
+ {
+  "cat": "recruiting",
+  "title": "Shore Capital CXO Program",
+  "org": "Shore Capital",
+  "d": null,
+  "when": "Full-time seeking students only",
+  "detail": "Shore develops early-career executives out of MBA programmes and places them in outsized roles within portfolio companies. A first-year found themselves ineligible — the club confirmed it is a full-time offering only.",
+  "act": "Apply through Career Central if you are 2Y and full-time seeking.",
+  "src": "Sloan ETA Club",
+  "flyer": false,
+  "links": [
+   [
+    "Career Central posting",
+    "https://cdo-mit.12twenty.com/job-postings/35006705625966"
+   ]
+  ]
+ },
+ {
+  "cat": "recruiting",
+  "title": "L.E.K. Consulting — 2027 healthcare hiring",
+  "org": "L.E.K.",
+  "d": null,
+  "when": "Atlanta · Boston · LA · NYC · SF",
+  "detail": "Hiring healthcare-dedicated consultants into one of L.E.K.’s largest sectors. These roles will <i>not</i> be posted in Career Central — the only route is emailing the recruiter directly.",
+  "act": "Email the recruiter for your city. Their addresses are in the MBA/LGO/MSMS post, not reproduced here.",
+  "src": "MBA/LGO/MSMS",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "recruiting",
+  "title": "McMaster-Carr — 2Y coffee chats",
+  "org": "McMaster-Carr",
+  "d": null,
+  "when": "Date in Career Central",
+  "detail": "For full-time seeking students: connect with MBA alumni about leadership, strategy and operations roles at the e-commerce company.",
+  "act": "Find details and register in Career Central.",
+  "src": "MBA/LGO/MSMS",
+  "flyer": false,
+  "links": [
+   [
+    "Career Central",
+    "https://cdo-mit.12twenty.com/events/30006101374559"
+   ]
+  ]
+ },
+ {
+  "cat": "recruiting",
+  "title": "Consulting firm event listings",
+  "org": "MCC",
+  "d": null,
+  "when": "Ongoing through the fall",
+  "detail": "Most firms post Sloan events through Career Central, though not perfectly. MBB each run Sloan-specific sites and email lists you get onto by signing up for their kickoffs. Bain already has a lot posted, including coffee chats starting soon. MCC’s advice: <b>if you do not feel ready for a coffee chat this week, do not sign up for one</b> — there will be many more.",
+  "act": "Bookmark Career Central plus the three firm pages, and get on the kickoff lists.",
+  "src": "Sloan ’27-28 Consulting Community",
+  "flyer": false,
+  "links": [
+   [
+    "Career Central events",
+    "https://cdo-mit.12twenty.com/events"
+   ],
+   [
+    "Bain · Sloan",
+    "https://www.bain.com/careers/work-with-us/students/sloan-school-of-management/"
+   ],
+   [
+    "BCG · Sloan",
+    "https://careers.bcg.com/global/en/on-campus/mit-sloan-school-of-management"
+   ],
+   [
+    "McKinsey · Sloan",
+    "https://www.mckinsey.com/careers/students/mba-candidates/mit-sloan-school-of-management"
+   ]
+  ]
+ },
+ {
+  "cat": "recruiting",
+  "title": "Paid AI training contract work",
+  "org": "Halluminate · Mercor",
+  "d": null,
+  "when": "Remote · set your own hours",
+  "detail": "Two separate postings circulating. Halluminate wants IB, PE, hedge fund, accounting or consulting backgrounds to create finance training data for AI models — $150/hr with IB/PE experience, $100/hr for accounting and consulting, plus production bonuses. Mercor is hiring LLM power users as contractors on frontier AI work at $80–100/hr, 30–40 hrs/week.",
+  "act": "Both were posted by classmates who asked for DMs — reply in Sloan 27s + 28s or Water Cooler.",
+  "src": "Sloan 27s + 28s · Water Cooler",
+  "flyer": false,
+  "links": [
+   [
+    "Mercor application",
+    "https://t.mercor.com/OY7T2"
+   ]
+  ]
+ },
+ {
+  "cat": "recruiting",
+  "title": "CDO Industry Recruiting sessions",
+  "org": "CDO",
+  "d": [
+   2026,
+   8,
+   16
+  ],
+  "when": "Ran 9–16 Sep · lunchtimes",
+  "detail": "Eight lunchtime sessions with CDO advisors, Employer Relations &amp; Recruiting, Career Peers and student clubs, covering recruiting timelines and industry guidance: Tech/PM/AI, Investment Banking, Sustainability/Energy, Consulting, Entrepreneurship, CPG/Retail, PE/VC and Healthcare.",
+  "act": "<b>All eight have now run.</b> Ask the CDO whether materials were circulated.",
+  "src": "MBA/LGO/MSMS",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "recruiting",
+  "title": "Tesla — campus visit",
+  "org": "Tesla",
+  "d": [
+   2026,
+   8,
+   17
+  ],
+  "when": "Presentations 16 Sep (invite only) · coffee chats 17 Sep",
+  "detail": "Company presentations for Recruiting/HR/Finance and Supply Chain were invite-only; coffee chats were open to students seeking internships and full-time roles, with separate sign-ups for each.",
+  "act": "<b>Sign-up closed 10 Sep at 5:00 PM.</b> Released spots would still surface on the Career Central pages.",
+  "src": "MBA/LGO/MSMS",
+  "flyer": false,
+  "links": [
+   [
+    "Internship chats",
+    "https://cdo-mit.12twenty.com/events/30006101386298"
+   ],
+   [
+    "Full-time chats",
+    "https://cdo-mit.12twenty.com/events/30006101386299"
+   ]
+  ]
+ },
+ {
+  "cat": "recruiting",
+  "title": "Amazon fireside — Jody Gibney, AWS",
+  "org": "Amazon",
+  "d": [
+   2026,
+   8,
+   18
+  ],
+  "when": "Fri 18 Sep · 11 AM–12 PM · E51-315",
+  "detail": "Sloan alum (MBA ’05) and AWS Director on what the Product Manager – Technical role actually is. Amazon is recruiting PMTs for both internships and full-time. Lunch provided.",
+  "act": "<b>Already happened.</b> Amazon is still recruiting PMTs through Career Central.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Career Central",
+    "https://cdo-mit.12twenty.com/events"
+   ]
+  ]
+ },
+ {
+  "cat": "recruiting",
+  "title": "Google PM fireside — Kaushik Sethuraman",
+  "org": "Sloan Tech Club",
+  "d": [
+   2026,
+   8,
+   18
+  ],
+  "when": "Fri 18 Sep · 12:30–1:30 PM",
+  "detail": "Group Product Lead at Google, previously Microsoft and Meta, on what sustains a long product career rather than one good season. A classmate who met him over the summer strongly recommended it.",
+  "act": "<b>Already happened.</b>",
+  "src": "SABC",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "recruiting",
+  "title": "World Bank — Young Professionals Program",
+  "org": "World Bank",
+  "d": [
+   2026,
+   8,
+   16
+  ],
+  "when": "Wed 16 Sep · 11:45 AM–12:30 PM · E51-325",
+  "detail": "The YPP selection and application process, international rotations and mentorship, and careers across the World Bank, IFC and MIGA. Final 15–20 minutes were live Q&amp;A.",
+  "act": "<b>Already happened.</b>",
+  "src": "MBA/LGO/MSMS",
+  "flyer": false,
+  "links": [
+   [
+    "Career Central",
+    "https://cdo-mit.12twenty.com/events/30006101396876"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "PM Club kick-off",
+  "org": "Product Management Club",
+  "d": [
+   2026,
+   8,
+   21
+  ],
+  "when": "Mon 21 Sep",
+  "detail": "The club, the PM recruiting timeline, and an “Intro to PM” panel: second-years straight off their summer PM internships on how the role actually differs company to company. Built for people still deciding whether PM is the path.",
+  "act": "Register on SloanGroups. VP applications close 25 Sep — see Deadlines.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Register",
+    "https://cglink.me/2eJ/r1936611"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "MIT Fintech Club — Fall Kickoff",
+  "org": "Fintech",
+  "d": [
+   2026,
+   8,
+   21
+  ],
+  "when": "Mon 21 Sep · lunchtime",
+  "detail": "Professional and social events for the year, the MIT Fintech Conference 2027 (the largest student-led fintech conference in the world), membership benefits including merch and conference discounts, and how to get involved in leadership. Confirmed events with Capital One and Anchorage. Food provided.",
+  "act": "Sign up on SloanGroups.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Sign up",
+    "https://cglink.me/2eJ/r1936564"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "Retail & Consumer Club kick-off",
+  "org": "Retail & Consumer Club",
+  "d": [
+   2026,
+   8,
+   21
+  ],
+  "when": "Mon 21 Sep · 5:30 PM · E62-223",
+  "detail": "Programming planned for the year and how to get involved with the club.",
+  "act": "Register on SloanGroups.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Register",
+    "https://cglink.me/2eJ/r1936719"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "Sloan Prison Education Initiative kick-off",
+  "org": "SPEI",
+  "d": [
+   2026,
+   8,
+   21
+  ],
+  "when": "Mon 21 Sep · lunchtime",
+  "detail": "Came up when someone asked about volunteering they actually enjoy — SPEI got two independent recommendations in the thread. Brave Behind Bars was suggested alongside it for anyone with coding experience.",
+  "act": "RSVP on SloanGroups.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "RSVP",
+    "https://sloangroups.mit.edu/rsvp?id=1936625"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "AI & ML Club — Fall Kickoff",
+  "org": "MIT Sloan AI & ML Club",
+  "d": [
+   2026,
+   8,
+   22
+  ],
+  "when": "Tue 22 Sep · 11:45 AM–12:45 PM · E62-276",
+  "detail": "Meet the leadership team and hear the year’s plan: recruiting events, hackathons, professor talks and lunch-and-learns. VP applications are covered too. Lunch provided, so RSVP matters for the headcount.",
+  "act": "RSVP on SloanGroups so they order enough food.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "RSVP",
+    "https://cglink.me/2eJ/r1936683"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "Entertainment, Media & Sports kick-off",
+  "org": "EMS Club",
+  "d": [
+   2026,
+   8,
+   22
+  ],
+  "when": "Tue 22 Sep · 11:45 AM · E51-335",
+  "detail": "Club overview and the year’s events, then a panel of second-years who interned in EMS industries this summer. Sloan’s EMS faculty leads, Ben Shields and Shira Springer, are joining. Lunch provided.",
+  "act": "Register on SloanGroups.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Register",
+    "https://cglink.me/2eJ/r1936320"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "Entrepreneurship Club kick-off",
+  "org": "E-Club",
+  "d": [
+   2026,
+   8,
+   23
+  ],
+  "when": "Wed 23 Sep · 11:45 AM–12:45 PM",
+  "detail": "Open to anyone curious about the entrepreneurial process — already building, hoping to join a startup, or just exploring. Lunch provided.",
+  "act": "Sign up on SloanGroups. The WhatsApp link was reposted after the first one broke — ask in Sloan 27s + 28s.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "club",
+  "title": "Southeast Asia Society kick-off",
+  "org": "SEA Club",
+  "d": [
+   2026,
+   8,
+   28
+  ],
+  "when": "Mon 28 Sep · 7:00 PM · E62 — moved from Tuesday",
+  "detail": "Indonesian food — mie goreng, nasi goreng, sate — and the year’s plans. Everyone interested in Southeast Asia is welcome, not just SEA students. Spots are going: only 8 were left as of 20 Sep.",
+  "act": "<b>Grab a spot now</b> — and tell them if you sign up and then cannot make it.",
+  "src": "Southeast Asians 27 + 28",
+  "flyer": false,
+  "links": [
+   [
+    "RSVP",
+    "https://cglink.me/2eJ/r1936712"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "MIT Snow — annual ski trip",
+  "org": "Ski & Snowboard Club",
+  "d": null,
+  "when": "<b>25–30 January</b> · destination revealed 17 Sep",
+  "detail": "The largest trek at Sloan. The destination reveal session ran on 17 Sep in E51-159 with registration details. Membership is what unlocks the discounted IKON Pass instructions, and IKON prices keep rising through the fall. A co-president confirmed the <b>base pass</b> is sufficient for the trip.",
+  "act": "You <b>must</b> be a club member to join the trip — sign up on SloanGroups, and lock in an IKON pass early.",
+  "src": "Sloan 27s + 28s · Water Cooler",
+  "flyer": false,
+  "links": [
+   [
+    "Join MIT Snow",
+    "https://sloangroups.mit.edu/snow/club_signup"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "Wine Club",
+  "org": "Wine",
+  "d": null,
+  "when": "Wine 101, Opus One, Wines of Argentina, oyster pairing night",
+  "detail": "One of Sloan’s most popular clubs. Tickets to the first event, Wine 101, dropped at noon the day after the announcement — the pattern across clubs this month is that tickets go within the hour.",
+  "act": "Sign up for the club, then watch for ticket drops.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Club signup",
+    "https://sloangroups.mit.edu/wineclub/club_signup"
+   ],
+   [
+    "Wine 101 tickets",
+    "https://cglink.me/2eJ/r1936600"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "MIT Sloan Robotics Club",
+  "org": "Robotics",
+  "d": null,
+  "when": "New this year · speaker events, company visits, founder and investor conversations",
+  "detail": "Humanoids, autonomous systems, AI models, hardware, investing and commercialisation. No technical background needed. Separately, they are hosting a speaker looking to meet <b>graduating 2Ys with GTM, partnerships or account management experience, with hiring in mind</b>.",
+  "act": "<b>Two steps:</b> become an official member on SloanGroups <i>and</i> join the WhatsApp community — the link is in the Sloan 27s + 28s chat.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Club signup",
+    "https://sloangroups.mit.edu/robotics/club_signup"
+   ],
+   [
+    "2Y robotics speaker RSVP",
+    "https://sloangroups.mit.edu/robotics/rsvp_boot?id=1936707"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "MIT Sloan Space Industry Club",
+  "org": "Space",
+  "d": null,
+  "when": "Free to join · 100+ members",
+  "detail": "Launch, satellites, exploration, in-space manufacturing and policy. Speaker events with founders and execs, the MIT New Space Age Conference which the club organises entirely itself, and space recruiting. No prior space experience needed.",
+  "act": "Join free on SloanGroups, then fill the verification form to get into the WhatsApp group.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "WhatsApp request form",
+    "https://docs.google.com/forms/d/e/1FAIpQLSe1rYj4aMvzb96vMBefLO_u-E-3kzTF2EV7j7Nvsew50J5tNw/viewform"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "Energy & Climate Club",
+  "org": "SECC",
+  "d": null,
+  "when": "Speaker events with lunch provided",
+  "detail": "Past speakers include Commonwealth Fusion Systems, Apple and Active Surfaces. The club also sources and passes along internship and job opportunities, and runs the MIT Energy Hackathon.",
+  "act": "Sign up on SloanGroups.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Club signup",
+    "https://sloangroups.mit.edu/secc/club_signup"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "Sloan Entrepreneurs in International Development",
+  "org": "SEID",
+  "d": null,
+  "when": "First club meeting being planned",
+  "detail": "For entrepreneurship, social impact ventures and work in emerging markets. Leadership positions are open, and the co-presidents asked anyone building a venture in an emerging market to reach out so SEID members can support it.",
+  "act": "Join on SloanGroups and apply for a leadership position; the WhatsApp link is in the Sloan 27s + 28s chat.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "SloanGroups",
+    "https://sloangroups.mit.edu/feeds?type=club&type_id=13664&tab=about"
+   ],
+   [
+    "Leadership application",
+    "https://forms.gle/GpxmTdTkmh72Sjyz6"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "Muslims in Business Club",
+  "org": "SMBC",
+  "d": null,
+  "when": "New club · kickoff RSVP open",
+  "detail": "A community at MIT Sloan for Muslim students and allies to connect through business, faith and friendship.",
+  "act": "Become a member on SloanGroups and RSVP for the kickoff; the WhatsApp link is in the Sloan 27s + 28s chat.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "SloanGroups",
+    "https://sloangroups.mit.edu/smbc/home/"
+   ],
+   [
+    "Kickoff RSVP",
+    "https://sloangroups.mit.edu/SMBC/rsvp_boot?id=1936685"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "MIT Impact Investing Initiative",
+  "org": "MI3",
+  "d": null,
+  "when": "Kickoff RSVP open",
+  "detail": "Updates, events and discussion on impact investing. Someone asked about a WhatsApp group in early September and the organisers said it would go out at the end of that week — it now exists.",
+  "act": "Join the club on SloanGroups first, then register for the kickoff.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Kickoff RSVP",
+    "https://sloangroups.mit.edu/rsvp?id=1936527"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "Affinity and regional clubs",
+  "org": "AAA · SABC · BBSA · HBC · LATAM · SWIM · Pride · SKC · EBC · ABC · BBC · Canada · SJSO · SEA · Africa BC",
+  "d": null,
+  "when": "Spotlighted across the Welcome Back Party run-up",
+  "detail": "Fifteen affinity groups co-led the Welcome Back Party and each was spotlighted in turn through early September, which is why so many join links circulated at once. Almost all want two actions: the WhatsApp group for announcements, and SloanGroups so you are on the official list and they get funding.",
+  "act": "Sign up on SloanGroups for the ones you want. The WhatsApp invite links were all posted in Sloan 27s + 28s — they are deliberately not reproduced on this page.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Browse all clubs",
+    "https://sloangroups.mit.edu/"
+   ]
+  ]
+ },
+ {
+  "cat": "club",
+  "title": "Sport and interest group chats",
+  "org": "Informal",
+  "d": null,
+  "when": "Started by classmates through September",
+  "detail": "New this month: Sloan Tennis Club (courts most Tuesday nights, plus an intramural league), volleyball, badminton, women’s soccer, Sloan Runners (Sloan and Steady, up to three pace groups, weekly runs from Tuesday), climbing, road cycling, Endurance Corner, chess, racing/F1, American football, design, and MIT AI Builders. Also MIT Cricket Club, practising Wednesdays 8–10 PM.",
+  "act": "All of these are WhatsApp-only. The links live in Sloan 27s + 28s and Water Cooler — search there for the one you want.",
+  "src": "Sloan 27s + 28s · Water Cooler",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "event",
+  "title": "Design Club × British Business Club — Frieda Gormley",
+  "org": "Design Club + BBC",
+  "d": [
+   2026,
+   8,
+   23
+  ],
+  "when": "Wed 23 Sep · 11:45 AM–12:45 PM · E51-372",
+  "detail": "Fireside with the co-founder of House of Hackney, the second B Corp in the world to legally seat Mother Nature on its board — which meant buying the company back from private equity first. On what that cost, and what it means to build a company that answers to something other than growth. Lunch provided.",
+  "act": "RSVP on SloanGroups.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "RSVP",
+    "https://cglink.me/2eJ/r1936730"
+   ]
+  ]
+ },
+ {
+  "cat": "event",
+  "title": "European Welcome Mixer",
+  "org": "European Business Club",
+  "d": [
+   2026,
+   8,
+   23
+  ],
+  "when": "Wed 23 Sep · 6:30 PM · Portico Brewing, Somerville",
+  "detail": "EBC’s first event of the year. European, lived in Europe, love Europe, or just want to meet people — all welcome.",
+  "act": "RSVP on SloanGroups.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "RSVP",
+    "https://cglink.me/2eJ/r1936713"
+   ]
+  ]
+ },
+ {
+  "cat": "event",
+  "title": "Caribs picnic on the Dome lawn",
+  "org": "Caribbean ocean",
+  "d": [
+   2026,
+   8,
+   23
+  ],
+  "when": "Wed 23 Sep · around 4–5 PM",
+  "detail": "While the weather holds. Bring a picnic blanket if you have one, and something to share.",
+  "act": "Just turn up — say so in the Caribbean chat so they know numbers.",
+  "src": "Caribbean",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "event",
+  "title": "Vision Board Your MBA night",
+  "org": "Design Club + SWIM",
+  "d": [
+   2026,
+   8,
+   24
+  ],
+  "when": "Thu 24 Sep · 5:00–7:00 PM · E62-221",
+  "detail": "All materials provided — pens, magazines, scissors. Use it either as quiet time to reflect on the year ahead, or as a way to meet people and talk through what you each want out of the MBA. You take the board home.",
+  "act": "RSVP on SloanGroups.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "RSVP",
+    "https://cglink.me/2eJ/r1936723"
+   ]
+  ]
+ },
+ {
+  "cat": "event",
+  "title": "Glasswing “Test Flight” AI hackathon",
+  "org": "Glasswing Ventures",
+  "d": [
+   2026,
+   8,
+   26
+  ],
+  "when": "Sat–Sun 26–27 Sep · 275 Newbury St, Boston",
+  "detail": "Two days during Boston AI Week. Theme is enterprise-ready AI, and judging explicitly rewards thinking through compliance. Teams of four, build Saturday, present to judges Sunday afternoon, awards and happy hour after. Free, capped around 100–120, roughly $300K in Azure and AWS compute credits in the prize pool.",
+  "act": "Register on Luma. <b>You can also just come to Sunday’s presentations</b> — Glasswing confirmed observers are welcome; ask in the AI &amp; ML Club chat to get on the guest list.",
+  "src": "MIT Sloan AI & ML Club · Water Cooler",
+  "flyer": false,
+  "links": [
+   [
+    "Register",
+    "https://luma.com/gzpv85yq"
+   ],
+   [
+    "Details",
+    "https://glasswing.vc/hackathon-2026/"
+   ]
+  ]
+ },
+ {
+  "cat": "event",
+  "title": "Adaptive Archipelago — floating architecture workshop",
+  "org": "MIT Future Fest + BIG",
+  "d": [
+   2026,
+   8,
+   26
+  ],
+  "when": "Workshop 26–27 Sep, 9 AM–5 PM · installation launches 1 Oct",
+  "detail": "Two-day workshop led by Daniel Sundlin, Partner at Bjarke Ingels Group, with Skylar Tibbits and the MIT Self Assembly Lab. Participants build a modular floating structure installed at the MIT Sailing Pavilion, on view 1–4 Oct with a reception on the 1st. Open to all backgrounds, particularly architecture, design, engineering, materials, climate and ecology.",
+  "act": "<b>Applications closed 16 Sep.</b> The installation itself is worth seeing 1–4 Oct.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "event",
+  "title": "Hack-Nation global hackathon — MIT hub",
+  "org": "MIT AI Builders Club + Hack-Nation",
+  "d": [
+   2026,
+   9,
+   3
+  ],
+  "when": "Sat–Sun 3–4 Oct · MIT hub",
+  "detail": "Partnered with OpenAI and ElevenLabs. 2,000+ builders across 15+ hubs worldwide, 24 hours, 6–8 AI challenges. $30K+ in cash and API credits, $200K+ in tools available to teams. No idea or team required, no previous experience needed. Top 1% of teams are invited into the Venture Lab afterwards.",
+  "act": "Apply on Luma with MIT hub code <b>hack-with-ilias</b>.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Apply",
+    "https://luma.com/fdcntrdc"
+   ]
+  ]
+ },
+ {
+  "cat": "event",
+  "title": "Boston Symphony — Rachmaninoff",
+  "org": "Informal",
+  "d": [
+   2026,
+   9,
+   1
+  ],
+  "when": "Thu 1 Oct",
+  "detail": "A classmate has tickets and asked who wants to go together; they also went to the Yo-Yo Ma concert on 17 Sep. The classical music group chat is the other route into BSO trips — it was set up to form a chamber group and go to concerts together.",
+  "act": "Say so in the Sloan 27s + 28s thread if you want in.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "event",
+  "title": "AI agents workshops",
+  "org": "Classmates",
+  "d": null,
+  "when": "Sessions planned for early October",
+  "detail": "Started when someone asked for help building personal AI agents to handle admin — grocery shopping, bills, birthdays, networking reminders, contacts. The response was large enough that classmates with real experience offered to teach it, covering personal harnesses, best practices and tech stacks. Payment is pizza and goodwill.",
+  "act": "Fill in the one-minute survey so they can tailor the sessions. <b>This is not a sign-up</b> — sessions start early October.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Preferences survey",
+    "https://docs.google.com/forms/d/e/1FAIpQLSfJnhmALLRlpvzklU9PTsh-ogszsz9GNiRosQueqxQ_SnDkIA/viewform"
+   ]
+  ]
+ },
+ {
+  "cat": "event",
+  "title": "think-cell campus ambassador",
+  "org": "think-cell",
+  "d": null,
+  "when": "Open · one spot",
+  "detail": "A current ambassador for the PowerPoint/Excel add-in is looking for a second “buddy” at Sloan. Merch, networking and potentially paid lunches.",
+  "act": "Reach out in the Sloan 27s + 28s thread — only one going.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "event",
+  "title": "Fintech Ventures customer discovery survey",
+  "org": "Classmates",
+  "d": null,
+  "when": "~5 minutes · anonymous",
+  "detail": "Two classmates researching how people early in their careers handle money decisions, for their FinTech Ventures course. No salary questions. Optional prizes: a 20-minute call on your own finances, or early access to what they are building.",
+  "act": "Fill it in if you want to help them out.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Survey",
+    "https://docs.google.com/forms/d/e/1FAIpQLScLrPTIkQpg9vmUKc4ylkKF0m0aPhE8S_-fkLUJE3AVTENpvw/viewform"
+   ]
+  ]
+ },
+ {
+  "cat": "event",
+  "title": "Sloan Olympics — World Cup edition",
+  "org": "Sloan Soccer Club",
+  "d": [
+   2026,
+   8,
+   18
+  ],
+  "when": "Fri 18 Sep · 12:30 PM · Steinbrenner Stadium",
+  "detail": "Soccer-themed games — bowling, crossbar challenge, 6v6 — plus side activities and merch, played between cohorts. An annual tradition. Caribs fielded separate 1Y and 2Y teams, the only ocean to do so.",
+  "act": "<b>Already happened.</b>",
+  "src": "Sloan 27s + 28s · Caribs 27 + 28",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "event",
+  "title": "Sloan Club Fest",
+  "org": "All clubs",
+  "d": [
+   2026,
+   8,
+   15
+  ],
+  "when": "Tue 15 Sep · 7–9 PM · Boston Marriott Cambridge",
+  "detail": "Booths from Fintech, SOS, SABC, ETA, SMBC, Rolling Sloans, SEA and others. SOs were explicitly encouraged to come without their Sloanie.",
+  "act": "<b>Already happened.</b> If you missed a club, SloanGroups lists them all.",
+  "src": "Sloan 27s + 28s · Significant Others of Sloan",
+  "flyer": false,
+  "links": [
+   [
+    "All clubs",
+    "https://sloangroups.mit.edu/"
+   ]
+  ]
+ },
+ {
+  "cat": "event",
+  "title": "SAGA × LGO URM alumni panel",
+  "org": "SAGA",
+  "d": [
+   2026,
+   8,
+   16
+  ],
+  "when": "Wed 16 Sep · 6:00–7:30 PM · E62-262, then Flat Top Johnny’s",
+  "detail": "“When Resources Shrink: Inclusive Leadership, Sponsorship, and Opportunity in a Tight Economy” — alumni and student panel, with free dinner and drinks after. Flat Top Johnny’s is 21+, so a US government ID or passport was needed.",
+  "act": "<b>Already happened.</b>",
+  "src": "Sloan 27s + 28s · Water Cooler",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "trek",
+  "title": "Sloan Tanzania Trek",
+  "org": "Trek organisers",
+  "d": null,
+  "when": "<b>20–27 Mar 2027</b> · 7 nights / 8 days · safari and Zanzibar beaches",
+  "detail": "Spring break. An info session is being scheduled for the week of 21 September to walk through the itinerary and details, with food provided; a poll went out for times. It will be recorded, and a summary deck circulated, for anyone who cannot attend in person.",
+  "act": "Vote in the timing poll in the trek group and send questions ahead so they can be answered in the session.",
+  "src": "Sloan Tanzania Trek Interest · Water Cooler",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "trek",
+  "title": "Israeli Trek 2027",
+  "org": "Trek organisers",
+  "d": null,
+  "when": "<b>21–28 Mar 2027</b> · Tel Aviv, Jerusalem, Negev, Dead Sea, Nazareth",
+  "detail": "Trip valued at $3,500 with heavy subsidies on a sliding scale: first 10 sign-ups $999, students 11–20 $1,200, 21–30 $1,500, 31+ $1,800. Includes hotels, domestic transport, tours, group events and most meals. Tech and startup meetings with founders and VCs alongside the history and nightlife.",
+  "act": "<b>The subsidy tiers reward signing up early</b> — fill the interest form if you are considering it at all.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Interest form",
+    "https://forms.gle/N8fzcejJwcA7MJTb8"
+   ],
+   [
+    "Trek website",
+    "https://adiy10.github.io/israel-trek-2027/"
+   ]
+  ]
+ },
+ {
+  "cat": "trek",
+  "title": "MIT Sloan #ColombiaTrek 2027",
+  "org": "VAOVA Travel",
+  "d": null,
+  "when": "March 2027 · pre-registration open",
+  "detail": "Locked in for March 2027, run with local operator VAOVA. Pre-registering is a one-minute survey and not a commitment — it puts you first in line for the itinerary and launch details.",
+  "act": "Pre-register so you get the launch details.",
+  "src": "#ColombiaTrek 2027 · Water Cooler",
+  "flyer": false,
+  "links": [
+   [
+    "Pre-register",
+    "https://docs.google.com/forms/d/e/1FAIpQLSctsamepmUcngGaudLoYR29UyWmnHYAKxCwXVSwrT_ihudNKg/viewform"
+   ]
+  ]
+ },
+ {
+  "cat": "trek",
+  "title": "Harvard/MIT India Trek",
+  "org": "KIIT",
+  "d": null,
+  "when": "Organisers in Boston 18–23 Sep and 26–29 Sep",
+  "detail": "The KIIT team was in Boston across two windows and open to meeting students interested in the trek. A brochure was circulated in the group.",
+  "act": "The organiser’s direct phone number was posted in Sloan 27s + 28s — it is not reproduced here. Find the post if you want to reach them.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": []
+ },
+ {
+  "cat": "trek",
+  "title": "Sloan trek tracker",
+  "org": "Classmates",
+  "d": null,
+  "when": "Crowd-maintained",
+  "detail": "A classmate set up a shared spreadsheet so people can add and track every trip being planned, after repeated questions about when the SF trek is (spring break, annually, startup/VC focused).",
+  "act": "Add any trek you are planning or considering.",
+  "src": "Sloan 27s + 28s",
+  "flyer": false,
+  "links": [
+   [
+    "Trek tracker",
+    "https://docs.google.com/spreadsheets/d/1BySofQINJy-Ut7sfddGR0WQfCUx9qh8UJ5yG8jR8EWw/edit"
+   ]
+  ]
+ }
+];
+
+var SECTIONS = [
+  {k:"deadline", h:"Dated and waiting on you", note:"Sorted by when it closes. Anything faded has already gone by — kept so you know it was there."},
+  {k:"recruiting", h:"Recruiting and employers", note:"CDO sessions, company visits and postings."},
+  {k:"club", h:"Clubs to join", note:"Most want two actions: the WhatsApp group for announcements, and SloanGroups so you are on the official list."},
+  {k:"event", h:"Events and one-offs", note:""},
+  {k:"trek", h:"Treks and travel", note:""}
+];
+var CATS = [{k:"all",label:"Everything"},{k:"deadline",label:"Deadlines"},{k:"recruiting",label:"Recruiting"},
+            {k:"club",label:"Clubs"},{k:"event",label:"Events"},{k:"trek",label:"Treks"}];
+var MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+var TODAY = new Date(META.today[0], META.today[1], META.today[2]);
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function dateOf(it){ return it.d ? new Date(it.d[0], it.d[1], it.d[2]) : null; }
+function days(dt){ return dt ? Math.round((dt - TODAY)/86400000) : null; }
+function status(it){ var n=days(dateOf(it)); if(n===null) return "open"; if(n<0) return "past"; if(n<=1) return "now"; if(n<=5) return "soon"; return "open"; }
+function stamp(it){
+  var dt=dateOf(it); if(!dt) return null;
+  var n=days(dt), label=dt.getDate()+" "+MONTHS[dt.getMonth()];
+  if(n<0) return {t:"Closed "+label, cls:""};
+  if(n===0) return {t:"Today", cls:"due"};
+  if(n===1) return {t:"Tomorrow", cls:"due"};
+  if(n<=5) return {t:label+" · "+n+" days", cls:"due"};
+  return {t:label, cls:""};
+}
+function id(it){ return (it.title+"|"+(it.org||"")).replace(/[^a-zA-Z0-9]+/g,"-").slice(0,90); }
+
+var filter="all", query="", hideDone=false, doneSet=new Set();
+try{ var raw=localStorage.getItem("sb-done"); if(raw) doneSet=new Set(JSON.parse(raw)); }catch(e){}
+function persist(){ try{ localStorage.setItem("sb-done", JSON.stringify(Array.from(doneSet))); }catch(e){} }
+
+function matches(it){
+  if(filter!=="all" && it.cat!==filter) return false;
+  if(!query) return true;
+  return [it.title,it.org,it.when,it.detail,it.act,it.src].join(" ").toLowerCase().indexOf(query)!==-1;
+}
+function rowHTML(it){
+  var key=id(it), st=status(it), s=stamp(it), done=doneSet.has(key);
+  return '<div class="row s-'+st+(done?' done':'')+'" data-k="'+key+'">'
+    +'<input class="tick" type="checkbox" id="c-'+key+'"'+(done?' checked':'')+' aria-label="Mark done">'
+    +'<div><div class="title">'+esc(it.title)+(it.org?' <span class="org">· '+esc(it.org)+'</span>':'')+'</div>'
+    +'<div class="meta">'
+      +(s?'<span class="tag '+s.cls+'">'+s.t+'</span>':'')
+      +(it.when?'<span class="tag when">'+esc(it.when)+'</span>':'')
+      +'<span class="tag src">'+esc(it.src)+'</span>'
+      +(it.flyer?'<span class="tag flyer">from a flyer</span>':'')
+    +'</div>'
+    +(it.detail?'<div class="detail">'+esc(it.detail)+'</div>':'')
+    +(it.act?'<div class="act">'+it.act+'</div>':'')
+    +(it.links&&it.links.length?'<div class="links">'+it.links.map(function(l){
+        return '<a href="'+esc(l[1])+'" target="_blank" rel="noopener noreferrer">'+esc(l[0])+'</a>';}).join('')+'</div>':'')
+    +'</div></div>';
+}
+function render(){
+  var html="";
+  SECTIONS.forEach(function(sec){
+    if(filter!=="all" && filter!==sec.k) return;
+    var items=ITEMS.filter(function(it){ return it.cat===sec.k && matches(it); });
+    if(hideDone) items=items.filter(function(it){ return !doneSet.has(id(it)); });
+    if(!items.length) return;
+    items.sort(function(a,b){
+      var da=dateOf(a), db=dateOf(b);
+      var pa=status(a)==="past", pb=status(b)==="past";
+      if(pa!==pb) return pa?1:-1;
+      if(!da&&!db) return 0; if(!da) return 1; if(!db) return -1;
+      return da-db;
+    });
+    html+='<section><div class="sec-head"><h2>'+sec.h+'</h2><span class="ct">'+items.length+'</span></div>'
+       +(sec.note?'<p class="sec-note">'+sec.note+'</p>':'')
+       +items.map(rowHTML).join('')+'</section>';
+  });
+  document.getElementById("board").innerHTML = html || '<div class="empty">Nothing matches that.</div>';
+}
+document.getElementById("chips").innerHTML = CATS.map(function(c){
+  return '<button class="chip" data-c="'+c.k+'" aria-pressed="'+(c.k==="all")+'">'+c.label+'</button>';}).join('');
+document.getElementById("chips").addEventListener("click", function(e){
+  var b=e.target.closest("[data-c]"); if(!b) return;
+  filter=b.dataset.c;
+  Array.prototype.forEach.call(this.querySelectorAll(".chip"),function(x){x.setAttribute("aria-pressed", String(x.dataset.c===filter));});
+  render();
+});
+document.getElementById("q").addEventListener("input", function(e){ query=e.target.value.trim().toLowerCase(); render(); });
+document.getElementById("hideDone").addEventListener("change", function(e){ hideDone=e.target.checked; render(); });
+document.getElementById("board").addEventListener("change", function(e){
+  var t=e.target.closest(".tick"); if(!t) return;
+  var k=t.closest(".row").dataset.k;
+  if(t.checked) doneSet.add(k); else doneSet.delete(k);
+  persist(); render();
+});
+
+var dueSoon = ITEMS.filter(function(it){ var n=days(dateOf(it)); return n!==null && n>=0 && n<=5; }).length;
+var live = ITEMS.filter(function(it){ return status(it)!=="past"; }).length;
+document.getElementById("tally").innerHTML =
+  [[live,"live items"],[dueSoon,"due in 5 days",dueSoon>0],
+   [ITEMS.filter(function(i){return i.cat==="club";}).length,"clubs"],
+   [META.groups,"groups read"],[META.messages,"messages"]]
+  .map(function(c){ return '<div class="cell"><div class="n'+(c[2]?' due':'')+'">'+c[0]+'</div><div class="k">'+c[1]+'</div></div>'; }).join('');
+
+document.getElementById("stamp").innerHTML =
+  '<span>Read <b>'+META.read+'</b></span><span><b>'+META.groups+'</b> groups · <b>'+META.flyers+'</b> flyers</span><span>Back to <b>'+META.back+'</b></span>';
+
+document.getElementById("foot").innerHTML = META.footer;
+render();
+</script>
+</body>
+</html>
